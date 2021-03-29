@@ -10,21 +10,21 @@
                 <div id="display-top"></div>
                 <div id="display-main">0</div>
             </div>
-            <button class="btn" id="btn-7">7</button>
-            <button class="btn" id="btn-8">8</button>
-            <button class="btn" id="btn-9">9</button>
-            <button class="btn" id="btn-plus">+</button>
-            <button class="btn" id="btn-4">4</button>
-            <button class="btn" id="btn-5">5</button>
-            <button class="btn" id="btn-6">6</button>
-            <button class="btn" id="btn-minus">-</button>
-            <button class="btn" id="btn-1">1</button>
-            <button class="btn" id="btn-2">2</button>
-            <button class="btn" id="btn-3">3</button>
-            <button class="btn" id="btn-multiply">*</button>
-            <button class="btn" id="btn-0">0</button>
-            <button class="btn" id="btn-dot">.</dbuttoniv>
-            <button class="btn" id="btn-divide">/</button>
+            <button class="number-btn" id="btn-7">7</button>
+            <button class="number-btn" id="btn-8">8</button>
+            <button class="number-btn" id="btn-9">9</button>
+            <button class="operator-btn" id="btn-plus">+</button>
+            <button class="number-btn" id="btn-4">4</button>
+            <button class="number-btn" id="btn-5">5</button>
+            <button class="number-btn" id="btn-6">6</button>
+            <button class="operator-btn" id="btn-minus">-</button>
+            <button class="number-btn" id="btn-1">1</button>
+            <button class="number-btn" id="btn-2">2</button>
+            <button class="number-btn" id="btn-3">3</button>
+            <button class="operator-btn" id="btn-multiply">*</button>
+            <button class="number-btn" id="btn-0">0</button>
+            <button class="btn" id="btn-dot">.</button>
+            <button class="operator-btn" id="btn-divide">/</button>
             <button class="btn" id="btn-clear">clr</button> 
             <button class="btn" id="btn-equals">=</button> 
         </div>
@@ -34,6 +34,11 @@
 </html>
 
 <script>
+
+let clearScreen = false;
+let operator = null;
+let firstOperand = null;
+let secondOperand = null;
 
 function add(num1, num2){
     return num1 + num2;
@@ -52,8 +57,12 @@ function divide(num1, num2){
 }
 
 function operate(operator, num1, num2){
+
+    console.log("Operator is: " + operator);
+
     switch(operator){
         case "+":
+            console.log("case +");
             return add(num1, num2);
             break;
         case "-":
@@ -68,71 +77,98 @@ function operate(operator, num1, num2){
     }
 }
 
+
 function updateDisplay(digit){
 
-    if(clearScreen === true){
-        mainDisplay.textContent = "";
-        clearScreen = false;
-    }
-
-    if(mainDisplay.textContent == 0){
-        mainDisplay.textContent = "";
-        mainDisplay.textContent = "" + mainDisplay.textContent + digit;
+    if(!isFinite(digit)){
+        mainDisplay.textContent = "OOPS";
     }
     else{
-        mainDisplay.textContent = "" + mainDisplay.textContent + digit;
+        if(clearScreen === true){
+            mainDisplay.textContent = "";
+            clearScreen = false;
+        }
+
+        if(mainDisplay.textContent == 0){
+            mainDisplay.textContent = "";
+            mainDisplay.textContent = "" + mainDisplay.textContent + digit;
+        }
+        else{
+            mainDisplay.textContent = "" + mainDisplay.textContent + digit;
+        }
     }
 }
 
-function getOperator(digit){
-    values.push(mainDisplay.textContent);
-    operators.push(digit);
-    clearScreen = true;
-    console.table(values);
-    console.table(operators);
+function displayValue(digit){
+    updateDisplay(digit);
 }
 
-let values = [];
-let operators = [];
-let num1 = 0;
-let num2 = 0;
-let operator = "";
-let clearScreen = false;
+function setOperator(digit){
+    operator = digit;
+}
 
-const btn1 = document.querySelector('#btn-1');
-const btn2 = document.querySelector('#btn-2');
-const btn3 = document.querySelector('#btn-3');
-const btn4 = document.querySelector('#btn-4');
-const btn5 = document.querySelector('#btn-5');
-const btn6 = document.querySelector('#btn-6');
-const btn7 = document.querySelector('#btn-7');
-const btn8 = document.querySelector('#btn-8');
-const btn9 = document.querySelector('#btn-9');
-const btn0 = document.querySelector('#btn-0');
-const btnPlus = document.querySelector('#btn-plus');
-const btnMinus = document.querySelector('#btn-minus');
-const btnMultiply = document.querySelector('#btn-multiply');
-const btnDivide = document.querySelector('#btn-divide');
-const btnEquals = document.querySelector('#btn-equals');
-const btnClear = document.querySelector('#btn-clear');
+function getDisplayValue(){
+    return parseInt(mainDisplay.textContent);
+}
 
+function setOperand(operand){
+
+    operand = parseInt(operand);
+
+    if(firstOperand === null) { firstOperand = operand; }
+    else { 
+        secondOperand = operand;
+        clearScreen = true;
+        updateDisplay(operate(operator, firstOperand, secondOperand));
+        firstOperand = getDisplayValue();
+    }
+}
+
+function generateResult(value){
+    secondOperand = value;
+    console.log(firstOperand, operator, secondOperand);
+    return operate(operator, firstOperand, secondOperand);
+}
+
+function resetDisplay(){
+    firstOperand = null;
+    secondOperand = null;
+    operator = null;
+    mainDisplay.textContent = 0;
+}
+
+const numberButtons = document.querySelectorAll('.number-btn');
+const operatorButtons = document.querySelectorAll('.operator-btn');
 const mainDisplay = document.querySelector('#display-main');
 const topDisplay = document.querySelector('#display-top');
+const btnEquals = document.querySelector('#btn-equals');
+const btnClear = document.querySelector('#btn-clear');
+const btnDot = document.querySelector('#btn-dot');
 
-btn1.addEventListener('click', (event) => updateDisplay(1));
-btn2.addEventListener('click', (event) => updateDisplay(2));
-btn3.addEventListener('click', (event) => updateDisplay(3));
-btn4.addEventListener('click', (event) => updateDisplay(4));
-btn5.addEventListener('click', (event) => updateDisplay(5));
-btn6.addEventListener('click', (event) => updateDisplay(6));
-btn7.addEventListener('click', (event) => updateDisplay(7));
-btn8.addEventListener('click', (event) => updateDisplay(8));
-btn9.addEventListener('click', (event) => updateDisplay(9));
-btn0.addEventListener('click', (event) => updateDisplay(0));
-btnPlus.addEventListener('click', (event) => getOperator("+"));
-btnMinus.addEventListener('click', (event) => getOperator("-"));
-btnMultiply.addEventListener('click', (event) => getOperator("*"));
-btnDivide.addEventListener('click', (event) => getOperator("/"));
+numberButtons.forEach((numberButton) => {
+    numberButton.addEventListener('click', (event) => {
+        displayValue(event.target.textContent);
+    })
+})
 
+operatorButtons.forEach((operatorButton) => {
+    operatorButton.addEventListener('click', (event) => {
+        setOperand(getDisplayValue());
+        setOperator(event.target.textContent);        
+        clearScreen = true;
+    })
+})
+
+btnEquals.addEventListener('click', (event) => {
+    result = generateResult(getDisplayValue());
+    clearScreen = true;
+    updateDisplay(result);
+})
+
+btnClear.addEventListener('click', (event) => resetDisplay());
+
+btnDot.addEventListener('click', (event) => {
+    displayValue(event.target.textContent);
+})
 
 </script>

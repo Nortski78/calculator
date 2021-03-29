@@ -36,6 +36,18 @@ button {
     height: 40px;
     margin: 2px;
 }
+
+.number-btn {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+}
+
+.operator-btn {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+}
  /* Calculator display */
 
  #calc-display-container {
