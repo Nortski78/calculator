@@ -37,13 +37,13 @@
 
 <script>
 
-let clear = false;
-let operator = null;
+let operator = "";
 let firstOperand = null;
 let secondOperand = null;
+let clear = false;
 
 function add(num1, num2){
-    return num1 + num2;
+    return (num1 + num2);
 }
 
 function subtract(num1, num2){
@@ -60,8 +60,12 @@ function divide(num1, num2){
 
 function operate(operator, num1, num2){
 
+    parseInt(num1);
+    parseInt(num2);
+
     switch(operator){
         case "+":
+            console.log(num1 + num2);
             return add(num1, num2);
             break;
         case "-":
@@ -80,11 +84,11 @@ function clearDisplay(){
     mainDisplay.textContent = "";
 }
 
-function updateDisplay(digit, isEqualsPressed = false){
+function getDisplayValue(){
+    return parseInt(mainDisplay.textContent);
+}
 
-    if(isEqualsPressed === true){
-        firstOperand = getDisplayValue();
-    }
+function updateDisplay(digit){
 
     if(!isFinite(digit)){
         mainDisplay.textContent = "OOPS";
@@ -92,6 +96,7 @@ function updateDisplay(digit, isEqualsPressed = false){
     else{
         if(clear === true){
             clearDisplay();
+            //mainDisplay.textContent = "";
             clear = false;
         }
 
@@ -105,35 +110,17 @@ function updateDisplay(digit, isEqualsPressed = false){
     }
 }
 
-function displayValue(digit){
-    updateDisplay(digit);
-}
+function setOperand(value){
 
-function setOperator(digit){
-    
-    if(digit != "="){
-        operator = digit;
-    }
-}
-
-function getDisplayValue(){
-    return parseInt(mainDisplay.textContent);
-}
-
-function setOperand(operand){
-
-    operand = parseInt(operand);
-    console.log(operand);
-
-    if(firstOperand === null) { firstOperand = operand; }
+    if(firstOperand === null) { firstOperand = value; }
     else { 
-        secondOperand = operand;
+        secondOperand === value;
         clear = true;
         updateDisplay(operate(operator, firstOperand, secondOperand));
         firstOperand = getDisplayValue();
     }
 
-    console.log("First Operand: " + firstOperand + " Second Operand: " + secondOperand);
+    console.log(firstOperand + " : " + secondOperand);
 }
 
 function resetDisplay(){
@@ -154,22 +141,26 @@ const btnDelete = document.querySelector('#btn-delete');
 
 numberButtons.forEach((numberButton) => {
     numberButton.addEventListener('click', (event) => {
-        displayValue(event.target.textContent);
+        updateDisplay(event.target.textContent);
     })
 })
 
 operatorButtons.forEach((operatorButton) => {
     operatorButton.addEventListener('click', (event) => {
-        setOperand(getDisplayValue());
-        setOperator(event.target.textContent);        
-        clear = true;
+        
+        if(getDisplayValue() == null) {
+            setOperand(getDisplayValue());
+            //setOperator(event.target.textContent);
+        }
+        else {
+            setOperand(getDisplayValue());
+        }
     })
 })
 
 btnEquals.addEventListener('click', (event) => {
-    setOperand(getDisplayValue());
-    operate(operator, firstOperand, secondOperand);
-    clear = true;
+    result = generateResult(getDisplayValue());
+    updateDisplay(result);
 })
 
 btnClear.addEventListener('click', (event) => resetDisplay());
@@ -180,6 +171,7 @@ btnDot.addEventListener('click', (event) => {
 
 btnDelete.addEventListener('click', (event) => {
     const currentDisplayValue = getDisplayValue();
+    console.log(typeof currentDisplayValue);
 
     let updatedDisplayValue = currentDisplayValue.toString();
 
@@ -187,13 +179,13 @@ btnDelete.addEventListener('click', (event) => {
 
     if(updatedDisplayValue.length === 1){
         updatedDisplayValue[0] = 0;
-        clear = true;
+        clearDisplay();
         updateDisplay(updatedDisplayValue[0]);
     }
     else{
         updatedDisplayValue.pop();
         updatedDisplayValue = updatedDisplayValue.join("");
-        clear = true;
+        clearDisplay();
         updateDisplay(updatedDisplayValue);
     }
 })
