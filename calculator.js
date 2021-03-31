@@ -47,7 +47,7 @@ function divide(num1, num2){
     }
 }
 
-function operate(operator, num1, num2){}
+function operate(operator, num1, num2){
 
     switch(operator){
         case "+":
@@ -71,9 +71,9 @@ function clearDisplay(){
 
 function updateDisplay(digit){
 
-    // if(isEqualsPressed === true){
-    //     firstOperand = getDisplayValue();
-    // }
+    if(digit === "ArrowUp" || digit === "ArrowDown" || digit === "ArrowRight" || digit === "ArrowLeft" || 
+        digit === "Home" || digit === "PageUp" || digit === "PageDown" || digit === "End" || digit === "Insert" || 
+        digit === "Unidentified"){ return; }
 
     if(!isFinite(digit && digit != ".")){
         mainDisplay.textContent = "OOPS";
