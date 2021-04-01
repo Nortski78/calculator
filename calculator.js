@@ -208,8 +208,8 @@ numberButtons.forEach((numberButton) => {
 
 operatorButtons.forEach((operatorButton) => {
     operatorButton.addEventListener('click', (event) => {
-        setOperand(getDisplayValue());
-        setOperator(event.target.textContent);        
+        setOperand(getDisplayValue());        
+        setOperator(event.target.textContent);  
         clear = true;
     })
 })
@@ -217,6 +217,7 @@ operatorButtons.forEach((operatorButton) => {
 btnEquals.addEventListener('click', (event) => {
     setOperand(getDisplayValue());
     operate(operator, firstOperand, secondOperand);
+    firstOperand = null;
     clear = true;
 })
 
