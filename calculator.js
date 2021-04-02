@@ -71,26 +71,26 @@ function clearDisplay(){
 
 function updateDisplay(digit){
 
+    if(secondOperand == 0 && operator === "/") {
+        mainDisplay.textContent = "OOPS";
+        return;
+    } 
+
     if(digit === "ArrowUp" || digit === "ArrowDown" || digit === "ArrowRight" || digit === "ArrowLeft" || 
         digit === "Home" || digit === "PageUp" || digit === "PageDown" || digit === "End" || digit === "Insert" || 
         digit === "Unidentified"){ return; }
 
-    if(!isFinite(digit && digit != ".")){
-        mainDisplay.textContent = "OOPS";
+    if(clear === true){
+        clearDisplay();
+        clear = false;
+    }
+
+    if(mainDisplay.textContent == 0){
+        mainDisplay.textContent = "";
+        mainDisplay.textContent = "" + mainDisplay.textContent + digit;
     }
     else{
-        if(clear === true){
-            clearDisplay();
-            clear = false;
-        }
-
-        if(mainDisplay.textContent == 0){
-            mainDisplay.textContent = "";
-            mainDisplay.textContent = "" + mainDisplay.textContent + digit;
-        }
-        else{
-            mainDisplay.textContent = "" + mainDisplay.textContent + digit;
-        }
+        mainDisplay.textContent = "" + mainDisplay.textContent + digit;
     }
 }
 
@@ -168,7 +168,7 @@ function resetDisplay(){
     firstOperand = null;
     secondOperand = null;
     operator = null;
-    mainDisplay.textContent = 0;
+    mainDisplay.textContent = "0";
 }
 
 function deleteDigit(){
@@ -221,7 +221,7 @@ btnEquals.addEventListener('click', (event) => {
     clear = true;
 })
 
-btnClear.addEventListener('click', (event) => resetDisplay());
+btnClear.addEventListener('click', (event) => { resetDisplay(); });
 
 btnDot.addEventListener('click', (event) => {
     if(getDisplayValue() == 0){
